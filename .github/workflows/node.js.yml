@@ -1,31 +1,45 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
-name: Node.js CI
+const { execSync } = require('child_process');
+const fs = require('fs');
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+// Function to clone a GitHub repository
+function cloneRepo(repoUrl, destination) {
+    try {
+        execSync(git clone ${repoUrl} ${destination});
+        console.log('Repository cloned successfully.');
+    } catch (error) {
+        console.error('Error cloning repository:', error);
+    }
+}
 
-jobs:
-  build:
+// Function to create a new branch
+function createBranch(repoPath, branchName) {
+    try {
+        execSync(cd ${repoPath} && git checkout -b ${branchName});
+        console.log(Branch ${branchName} created successfully.);
+    } catch (error) {
+        console.error('Error creating branch:', error);
+    }
+}
 
-    runs-on: ubuntu-latest
+// Function to push changes to a branch
+function pushChanges(repoPath, branchName) {
+    try {
+        execSync(cd ${repoPath} && git add . && git commit -m "Automated commit" && git push origin ${branchName});
+        console.log('Changes pushed successfully.');
+    } catch (error) {
+        console.error('Error pushing changes:', error);
+    }
+}
 
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+// Example usage
+const repoUrl = 'https://github.com/offranking/newproject.git';
+const destination = 'repository';
+const branchName = 'new-feature';
 
-    steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+cloneRepo(repoUrl, destination);
+createBranch(destination, branchName);
+// Modify files in the repository as needed
+pushChanges(destination, branchName);
