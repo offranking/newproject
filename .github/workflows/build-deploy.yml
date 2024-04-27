@@ -14,8 +14,13 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v21
+      uses: actions/checkout@v2
       
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14' # You can specify the version you want here
+
     - name: Install dependencies
       run: npm install
 
@@ -25,4 +30,3 @@ jobs:
     - name: Deploy
       run: |
         echo "Deploying..."
-        # Add your deploy commands here
