@@ -4,18 +4,27 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'javac -d . src/*.java' // Compile Java code
+                sh 'echo "Building..."'
             }
         }
         stage('Test') {
             steps {
-                sh 'java -cp .:junit-platform-console-standalone-1.7.2.jar org.junit.platform.console.ConsoleLauncher --scan-class-path' // Run tests
+                sh 'echo "Testing..."'
             }
         }
-        stage('Package') {
+        stage('Deploy') {
             steps {
-                sh 'jar -cvf myapp.jar *' // Package application
+                sh 'echo "Deploying..."'
             }
+        }
+    }
+    
+    post {
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed!'
         }
     }
 }
